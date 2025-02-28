@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #chatbox { width: 50%; height: 300px; border: 1px solid #ccc; overflow-y: scroll; margin: 20px auto; padding: 10px; }
+        #messageInput { width: 40%; padding: 10px; }
+        button { padding: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Simple Chat App</h2>
+    <div id="chatbox"></div>
+    <input type="text" id="messageInput" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        const chatbox = document.getElementById("chatbox");
+        const messageInput = document.getElementById("messageInput");
+        
+        const ws = new WebSocket("wss://chattingapp-ssfq.onrender.com"); // Updated WebSocket URL
+        
+        ws.onmessage = (event) => {
+            const msg = document.createElement("p");
+            msg.textContent = event.data;
+            chatbox.appendChild(msg);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        };
+        
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                ws.send(message);
+                messageInput.value = "";
+            }
+        }
+    </script>
+</body>
+</html>
